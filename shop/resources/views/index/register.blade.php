@@ -22,6 +22,7 @@
 		<div class="registerArea">
 			<h3>注册新用户<span class="go">我有账号，去<a href="login.html" target="_blank">登陆</a></span></h3>
 			<div class="info">
+				{{session('msg')}}
 				<form action="{{url('user/registerinfo')}}" method="post" class="sui-form form-horizontal">
 					@csrf
 					<div class="control-group">
@@ -29,7 +30,14 @@
 						<div class="controls">
 							<input type="text" placeholder="请输入你的用户名" name="uname" class="input-xfat input-xlarge">
 							<b style="color:red">{{$errors->first('uname')}}</b>
+						</div>
 					</div>
+					<div class="control-group">
+						<label class="control-label">邮箱：</label>
+						<div class="controls">
+							<input type="text" placeholder="请输入你的邮箱" name="user_email" class="input-xfat input-xlarge">
+							<b style="color:red">{{$errors->first('user_email')}}</b>
+						</div>
 					</div>
 					<div class="control-group">
 						<label for="inputPassword" class="control-label">登录密码：</label>
@@ -53,19 +61,8 @@
 							<b style="color:red">{{$errors->first('tel')}}</b>
 						</div>
 					</div>
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">短信验证码：</label>
-						<div class="controls">
-							<input type="text" placeholder="短信验证码" class="input-xfat input-xlarge">  <a href="#">获取短信验证码</a>
-						</div>
-					</div>
-					
-					<div class="control-group">
-						<label for="inputPassword" class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-						<div class="controls">
-							<input name="m1" type="checkbox" value="2" checked=""><span>同意协议并注册《品优购用户协议》</span>
-						</div>
-					</div>
+
+
 					<div class="control-group">
 						<label class="control-label"></label>
 						<div class="controls btn-reg">

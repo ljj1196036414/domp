@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Admin\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\model\CategoryModel;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Tree;
 class CategoryController extends AdminController
 {
     /**
@@ -15,7 +17,19 @@ class CategoryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'CategoryModel';
+    protected $title = '分类管理';
+    public function index(Content $content)
+    {
+        return Admin::content(function ($content) {
+            $content->header('商品分类管理');
+            $content->body(CategoryModel::tree(function ($tree) {
+                $tree->branch(function ($branch) {
+//                    $src = config('admin.upload.host') . '/' . $branch['image'];
+                    return "{$branch['parent_id']} - {$branch['cat_name']}";
+                });
+            }));
+        });
+    }
 
     /**
      * Make a grid builder.
@@ -24,6 +38,7 @@ class CategoryController extends AdminController
      */
     protected function grid()
     {
+
         $grid = new Grid(new CategoryModel());
 
         $grid->column('cat_id', __('Cat id'));
@@ -79,21 +94,26 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new CategoryModel());
 
-        $form->text('cat_name', __('Cat name'));
-        $form->text('keywords', __('Keywords'));
-        $form->text('cat_desc', __('Cat desc'));
-        $form->number('parent_id', __('Parent id'));
-        $form->switch('sort_order', __('Sort order'))->default(50);
-        $form->text('template_file', __('Template file'));
-        $form->text('measure_unit', __('Measure unit'));
-        $form->switch('show_in_nav', __('Show in nav'));
-        $form->text('style', __('Style'));
-        $form->switch('is_show', __('Is show'))->default(1);
-        $form->switch('grade', __('Grade'));
-        $form->text('filter_attr', __('Filter attr'));
-        $form->switch('float_percent', __('Float percent'));
+        $form = new Form(new CategoryModel());
+        $directors=[
+            1=>'john',
+            2=>'Smith',
+            3=>'kate',
+        ];
+        $form->text('cat_name', __('分类名称'));
+        //$form->text('keywords', __('Keywords'));
+        //$form->text('cat_desc', __('Cat desc'));
+        $form->select('parent_id', __('父级分类'))->options(CategoryModel::selectOptions());
+        $form->number('sort_order', __('排序'));
+        //$form->text('template_file', __('Template file'));
+        //$form->text('measure_unit', __('Measure unit'));
+        //$form->switch('show_in_nav', __('Show in nav'));
+        //$form->text('style', __('Style'));
+       // $form->switch('is_show', __('Is show'))->default(1);
+        //$form->switch('grade', __('Grade'));
+        //$form->text('filter_attr', __('Filter attr'));
+        //$form->switch('float_percent', __('Float percent'));
 
         return $form;
     }

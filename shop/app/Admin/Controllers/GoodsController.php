@@ -97,4 +97,5 @@ class GoodsController extends AdminController
 
         return $form;
     }
+
 }
